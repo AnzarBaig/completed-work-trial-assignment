@@ -24,15 +24,17 @@ Step 6 => You have successfully setup the project, now start working on your tas
 
 Step 7 => Good luck!
 
-TASKS
 
-1. Build a page that shows a wall of all the recognitions shared in the database
-2. Each recognition will be a card that displays cleanly all of the data for that recognition
+STEP 1 - Dashboard Feedback
+1.  Create a new workplace in slack, and install our app (search Incognito AI on slack app directory). Now head to https://app.incognitoapps.com/login and login to the dashboard. Record yourself while exploring the dashboard and give feedback on it, like how we can improve the design or functionality overall?
+
+STEP 2 - Feature Development
+1. Build a page that shows a wall of recognitions for this tenant(T01HP7H5HME) as if they were logged in to the dashboard
+2. Each recognition will be a card that displays cleanly all of the data you think that should be shown to the employees
 3. The page should be searchable/filterable
    - Search by giver/receiver name or recognition message
    - Filter by date range
    - Filter by company values
 4. The page should use the React-Masonry-CSS package to build the "Wall of recognitions"
-5. The page should load 30 recognitions and then load 30 more when you hit the bottom to create an infinite scroll
+5. The page should load 20 recognitions and then load 20 more when you hit the bottom to create an infinite scroll
 6. Most of the design should be done using Mantine components. Any custom design/tweaking should use Tailwind CSS
-7. Create a new workplace in slack, and install our app (search Incognito AI on slack app directory). Now head to https://app.incognitoapps.com/login and login to the dashboard. Record yourself while exploring each and every feature and give feedback on it, like how we can improve that feature?, is that feature easy to understand?, is the UI of the feature good? etc.
