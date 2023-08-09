@@ -2,4 +2,7 @@
 
 module.exports = {
   '*.{ts,js}': ["yarn lint"],
-}
+  "parserOptions": {
+    "project": "./backend/tsconfig.json"
+  }
+};

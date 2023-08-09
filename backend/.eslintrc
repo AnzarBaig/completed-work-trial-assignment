@@ -4,6 +4,7 @@
 	"parserOptions": {
 		"project": "./tsconfig.json", // tells parser relative path of tsconfig.json
 		"ecmaVersion": 12,
+		"tsconfigRootDir": "__dirname",
 		"sourceType": "module"
 	},
 	"plugins": [

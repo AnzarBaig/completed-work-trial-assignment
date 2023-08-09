@@ -5,6 +5,7 @@ import { router } from "configs/express";
 import { PORT } from "@constants";
 
 const startServer = async () => {
+	
 	const app = express();
 	app.use(cors());
 	app.use(express.json());

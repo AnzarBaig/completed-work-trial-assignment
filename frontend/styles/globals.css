@@ -6,3 +6,13 @@
 * {
 	font-family: "Inter", sans-serif !important;
 }
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -8px; /* Adjust as needed */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding: 8px; /* Adjust as needed */
+}

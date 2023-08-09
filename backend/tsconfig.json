@@ -68,7 +68,7 @@
     },
   },
   "include": [
-    "src"
+    "./src/**/*"
   ],
   "ts-node": {
     "swc": true,
