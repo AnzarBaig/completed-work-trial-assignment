@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
-import { Input, Avatar, Button } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
+import { Button, Modal, Input, Loader, Avatar } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
+import axios from 'axios';
+import { Recognition } from 'typings/general';
 
 interface NavbarProps {
   onSearch: (searchTerm: string) => void;
-  onDateSelect: (selectedDate: Date | null) => void;
+  onDateSelect: (selectedDates: [Date | null, Date | null]) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSearch, onDateSelect }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<[Date | null, Date | null]>([null, null]);
   const [calendarOpened, setCalendarOpened] = useState<boolean>(false);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearchTerm = event.target.value;
-    setSearchTerm(newSearchTerm);
-    onSearch(newSearchTerm);
-  };
+  const [searchResults, setSearchResults] = useState<Recognition[]>([]);
+  const [loadingResults, setLoadingResults] = useState<boolean>(false);
 
   const handleDateSelect = (value: [Date | null, Date | null]) => {
-    setSelectedDate(value[0]);
-    onDateSelect(value[0]);
+    setSelectedDates(value);
+  };
+
+  const applyDateFilter = () => {
+    onDateSelect(selectedDates);
     setCalendarOpened(false);
   };
 
@@ -28,9 +29,36 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, onDateSelect }) => {
     setCalendarOpened(!calendarOpened);
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = event.target.value;
+    setSearchTerm(newSearchTerm);
+    onSearch(newSearchTerm);
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      setLoadingResults(true);
+      axios.get<{ data: { recognitions: Recognition[] } }>(`http://localhost:8000/api/search?query=${searchTerm}`)
+        .then(response => {
+          setSearchResults(response.data.data.recognitions);
+          console.log(response);
+          
+        })
+        .catch(error => {
+          console.error("Error fetching search results:", error);
+          setSearchResults([]);
+        })
+        .finally(() => {
+          setLoadingResults(false);
+        });
+    } else {
+      setSearchResults([]);     
+    }
+  }, [searchTerm]);
+
   return (
     <div className="flex flex-col md:flex-row items-center justify-between p-4 mb-2 bg-blue-500">
-      <div className="flex items-center mb-4 md:mb-0">
+      <div className="flex items-center">
         <Avatar
           size="lg"
           src="./Images/bear.webp"
@@ -39,32 +67,47 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, onDateSelect }) => {
         />
         <h3 className="text-white font-bold text-xl">Recognition Wall</h3>
       </div>
-      <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 ml-2 relative">
-        <Input
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Search by giver or receiver"
-          className="w-full md:w-auto"
-        />
+      <div className="flex items-center space-x-2 mt-4 md:mt-0 ml-0 md:ml-2 relative">
+        <div className="relative w-full">
+          <Input
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search by giver or receiver"
+          />
+          {loadingResults && (
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <Loader size="xs" />
+            </div>
+          )}
+        </div>
         <Button
           onClick={toggleCalendar}
-          className="mt-2 md:mt-0 ml-0 md:ml-2 border border-slate-400 rounded px-4 py-2"
+          className="border border-slate-400 rounded px-4 py-2"
         >
           Calendar
         </Button>
-        {calendarOpened && (
-          <div
-            className="absolute mt-2 md:mt-0 top-full left-0 md:right-0 z-50 p-4 bg-white rounded-lg shadow-md md:w-[300px]"
-          >
+        <Modal
+          opened={calendarOpened}
+          onClose={() => setCalendarOpened(false)}
+          title="Select Date Range"
+          size="xs"
+        >
+          <div className="p-4">
             <DatePicker
               type="range"
-              allowSingleDateInRange
-              value={[selectedDate, selectedDate]}
+              value={selectedDates}
               onChange={handleDateSelect}
             />
+            <div className="flex justify-center mt-4">
+              <Button
+                onClick={applyDateFilter}
+                className="border border-slate-400 rounded px-4 py-2"
+              >
+                Apply
+              </Button>
+            </div>
           </div>
-        )}
-
+        </Modal>
       </div>
     </div>
   );

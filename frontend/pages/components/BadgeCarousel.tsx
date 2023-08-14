@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Badge } from '@mantine/core';
-import RecognitionCard from './RecognitionCard'; // Adjust the import path
-import { Recognition } from 'typings/general'; // Adjust the import path to your Recognition type
-import Masonry from 'react-masonry-css'; // Import Masonry
+import RecognitionCard from './RecognitionCard';
+import { Recognition } from 'typings/general';
+import Masonry from 'react-masonry-css';
 
 interface BadgeCarouselProps {
   recognitionCards: Recognition[];
@@ -24,19 +24,22 @@ const BadgeCarousel: React.FC<BadgeCarouselProps> = ({ recognitionCards }) => {
     <div className="flex flex-col space-y-4 items-center">
       <div className="flex flex-wrap justify-center space-x-1">
         {uniqueBadges.map(badge => (
-          <Badge
-            color="teal"
-            className={`px-1 py-0.5 m-1 text-xs cursor-pointer ${
-              selectedBadge === badge ? 'bg-teal-400 text-white' : ''
-            }`}
-            key={badge}
-            onClick={() => handleBadgeClick(badge ? badge : '')}
-          >
-            {badge}
-          </Badge>
+          badge && (
+            <Badge
+              color="teal"
+              style={{ cursor: 'pointer' }}
+              className={`px-1 py-0.5 m-1 text-xs ${
+                selectedBadge === badge ? 'bg-teal-400 text-white' : ''
+              }`}
+              key={badge}
+              onClick={() => handleBadgeClick(badge)}
+            >
+              {badge}
+            </Badge>
+          )
         ))}
       </div>
-      {selectedBadge && (
+      {filteredRecognitionCards.length > 0 && selectedBadge && (
         <Masonry
           breakpointCols={{ default: 4, 1100: 3, 700: 2, 500: 1 }}
           className={'my-masonry-grid'}

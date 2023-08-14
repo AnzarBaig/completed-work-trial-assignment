@@ -1,12 +1,11 @@
-
 import React from "react";
 import { Card, Image, Text, Badge } from "@mantine/core";
 import { Recognition } from "typings/general";
-import Shimmer from "./Shimmer"; // Import the Shimmer component
+import Shimmer from "./Shimmer";
 
 interface RecognitionCardProps {
   recognition: Recognition;
-  isLoading?: boolean; // Add isLoading prop
+  isLoading?: boolean;
 }
 
 const RecognitionCard: React.FC<RecognitionCardProps> = ({ recognition, isLoading }) => {
@@ -21,10 +20,12 @@ const RecognitionCard: React.FC<RecognitionCardProps> = ({ recognition, isLoadin
     img,
   } = recognition;
 
+  const formattedDate = date ? new Date(date).toLocaleDateString() : "N/A";
+
   return (
     <Card shadow="xs" padding="md" radius="lg" className="bg-white">
       {isLoading ? (
-        <Shimmer /> // Display shimmer effect only during initial loading
+        <Shimmer />
       ) : (
         <div>
           <div className="mb-2 flex items-center justify-center">
@@ -36,16 +37,16 @@ const RecognitionCard: React.FC<RecognitionCardProps> = ({ recognition, isLoadin
               radius="md"
             />
           </div>
-          <Text size="sm" weight={700} className="mb-1">
-            Recognition from {giverName} to {receiverNames.join(", ")}
-          </Text>
-          <Text size="xs" color="gray" className="mb-1">
-            Team: {teamName}
+          <Text size="md" weight={700} className="mb-1">
+            Recognition from {giverName}
+            <hr />
+            To: {receiverNames.join(", ")}
+            <hr />
           </Text>
           <Text size="xs" color="gray" className="mb-2">
-            Posted: {date ? new Date(date).toLocaleString() : "N/A"}
+            Posted: {formattedDate}
           </Text>
-          <Text size="xs" className="mb-2">
+          <Text size="sm" className="mb-2">
             {message}
           </Text>
           <div className="justify mt-auto flex flex-col space-x-1 ">

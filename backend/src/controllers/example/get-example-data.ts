@@ -1,6 +1,6 @@
 import { Controller } from "typings/express";
 import { PrismaClient } from '@prisma/client';
-import { log } from "console";
+const emoji = require("node-emoji");
 const prisma = new PrismaClient();
 
 type RequestParams = void;
@@ -61,12 +61,13 @@ export const getRecognitionData: Controller<RequestParams, ResponseData, Request
       team_id: item.team_id,
       team_name: item.team_name,
       message: item.message,
-      value: item.value,
+      value: item.value ? emoji.emojify(item.value) : null,
       img: item.img,
       date_posted: item.date_posted,
       giver_alias: item.giver_alias,
       receiver_names: item.receiver_names,
     }));
+
     res.status(200).json({
       success: true,
       code: 200,
@@ -84,5 +85,5 @@ export const getRecognitionData: Controller<RequestParams, ResponseData, Request
       error: "Internal Server Error",
     });
   }
+  
 };
-

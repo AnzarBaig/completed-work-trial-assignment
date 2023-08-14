@@ -21,6 +21,7 @@ const startServer = async () => {
 	});
 
 	app.use("/api", router);
+	app.use("/search", router);
 	app.listen(PORT, () => console.info(`App is running at Port: ${PORT}`));
 };
 
