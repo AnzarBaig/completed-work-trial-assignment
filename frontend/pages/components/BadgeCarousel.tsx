@@ -4,24 +4,30 @@ import RecognitionCard from './RecognitionCard';
 import { Recognition } from 'typings/general';
 import Masonry from 'react-masonry-css';
 
+// Props interface for BadgeCarousel component
 interface BadgeCarouselProps {
   recognitionCards: Recognition[];
 }
 
 const BadgeCarousel: React.FC<BadgeCarouselProps> = ({ recognitionCards }) => {
+  // Extract unique badges from recognitionCards
   const uniqueBadges = [...new Set(recognitionCards.flatMap(card => card.value))];
+  // State for currently selected badge
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
+  // Handler for badge click
   const handleBadgeClick = (badge: string) => {
     setSelectedBadge(prevBadge => (prevBadge === badge ? null : badge));
   };
 
+  // Filter recognition cards based on selected badge
   const filteredRecognitionCards = selectedBadge
     ? recognitionCards.filter(card => card.value === selectedBadge)
     : recognitionCards;
 
   return (
     <div className="flex flex-col space-y-4 items-center">
+      {/* Display badges */}
       <div className="flex flex-wrap justify-center space-x-1">
         {uniqueBadges.map(badge => (
           badge && (
@@ -39,6 +45,7 @@ const BadgeCarousel: React.FC<BadgeCarouselProps> = ({ recognitionCards }) => {
           )
         ))}
       </div>
+      {/* Display filtered recognition cards with Masonry layout */}
       {filteredRecognitionCards.length > 0 && selectedBadge && (
         <Masonry
           breakpointCols={{ default: 4, 1100: 3, 700: 2, 500: 1 }}
@@ -47,6 +54,7 @@ const BadgeCarousel: React.FC<BadgeCarouselProps> = ({ recognitionCards }) => {
         >
           {filteredRecognitionCards.map(card => (
             <div key={card.id} className={'my-masonry-grid_column'}>
+              {/* Render RecognitionCard component */}
               <RecognitionCard recognition={card} />
             </div>
           ))}
